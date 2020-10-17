@@ -1,5 +1,5 @@
 
-+[Assignment 1](Assingment1.html)
+#[Assignment1: RMarkDown](Assignment1.html)
 
 
 ## Welcome to GitHub Pages
