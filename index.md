@@ -6,4 +6,4 @@
 
 ># Week3:
 
-- [Class Exercise1:](Clas_Exercise04112020.Rmd)
+- [Class Exercise1:](Class_Exercise04112020.html)
