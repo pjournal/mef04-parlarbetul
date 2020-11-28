@@ -1,0 +1,146 @@
+---
+title: "Week_2_dplyr_exercises"
+author: "rbp"
+date: "11/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse) #tidyverse is a package group which includes dplyr as well
+library(lubridate)
+
+```
+
+```{r}
+raw_df <- readRDS("~/Desktop/Data Analytics/R/Week_2/rp_201801_202005_df.rds")
+```
+
+```{r}
+raw_df %>% glimpse()
+```
+
+## Exercises
+Solve the following exercises. Outputs are given below, you are expected write code to match the outputs.
+
+### 1. Find the mean and standard deviation of licensed geothermal productions in all years. (Tip: Use lubridate::year to get years from date data.)
+
+```{r}
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```{r}
+## # A tibble: 3 x 3
+##    year mean_geo sd_geo
+##   <dbl>    <dbl>  <dbl>
+## 1  2018     681.   65.2
+## 2  2019     799.   74.2
+## 3  2020     935.   59.0
+```
+
+### Solution 1
+
+Let's take the time and licensed geothermal production column.
+```{r}
+raw_df %>% select(date_time=dt,geothermal_lic)
+
+```
+
+Then, add a year column with lubridate function and pivot the data on year. Calculate the mean and sd with the summarise function.
+
+```{r}
+raw_df %>% 
+  group_by(year = lubridate::year(dt))  %>% 
+  summarise(mean_geo = round(mean(geothermal_lic)), sd_geo = round(sd(geothermal_lic),1))
+```
+
+### 2. Find the hourly average unlicensed solar (sun_ul) production levels for May 2020.
+```{r}
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```{r}
+## # A tibble: 24 x 2
+##    hour avg_prod
+##   <int>    <dbl>
+## 1     0     0.17
+## 2     1     0.37
+## 3     2     0.7 
+## # … with 21 more rows
+```
+
+### Solution 2
+
+```{r}
+raw_df %>% 
+  mutate(hour = lubridate::hour(dt), year=lubridate::year(dt), month=lubridate::month(dt)) %>%
+  filter(year== 2020, month== 05) %>%
+  group_by(hour) %>%
+  summarise(avg_prod = round(mean(sun_ul),2)) %>%
+  select(hour, avg_prod)
+
+```
+
+### 3. Find the average daily percentage change of licensed biomass (biomass_lic) in 2019. (e.g. Suppose daily production is 50 in day 1 and 53 in day 2, then the change should be (53-50)/50 -1 = 0.06) (Tip: Use lubridate::as_date to convert date time to date. Use lag and lead functions to offset values.)
+```{r}
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```{r}
+## # A tibble: 1 x 1
+##   average_change
+##            <dbl>
+## 1        0.00282
+```
+
+### Solution 3
+
+```{r}
+raw_df %>% 
+  mutate(date = lubridate::date(dt), year=lubridate::year(dt)) %>%
+  filter(year == 2019) %>%
+  select(date,year,biomass_lic) %>%
+  arrange(date) %>% 
+  group_by(date) %>% 
+  summarise(sum_bl=sum(biomass_lic)) %>%
+  transmute(date, sum_bl, biomass_lic_next = lag(sum_bl,1)) %>%
+  summarise(sum_bl, biomass_lic_next, p = ((sum_bl-biomass_lic_next)/biomass_lic_next) -1) %>%
+  summarise(average_change = mean(c(NA, diff(p)),na.rm=TRUE))
+
+```
+### 4. Find the yearly total production levels in TWh (Current values are in MWh. 1 GWh is 1000 MWh and 1 TWh is 1000 GWh). (Tip: In order to avoid a lengthy summation you can use tidyr::pivot_longer to get a long format.)
+```{r}
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+```{r}
+## # A tibble: 3 x 2
+##    year total_production
+##   <dbl>            <dbl>
+## 1  2018             62.6
+## 2  2019             76.7
+## 3  2020             37.3
+```
+
+### Solution 4
+
+```{r}
+raw_df %>%
+  group_by(year=lubridate::year(dt)) %>%
+  rowwise() %>%
+  summarise(total_prod = sum(c_across(where(is.numeric)))) %>%
+  summarise(tp = sum(total_prod)/1000000) %>%
+  transmute(year, total_production = round(tp,digits=1))
+
+```
+
+
+
+
+
+
+
+
+
+
+
