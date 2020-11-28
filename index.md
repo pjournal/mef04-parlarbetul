@@ -6,7 +6,7 @@
 
 ### Week2:
 Solutions for dplyr lecture exercises; ['Turkish Renewable Energy Production Data'](https://pjournal.github.io/files/dplyr_renewable.html)
-* [Exercise: dplyr](Week_2_dplyr.html)
+* [dplyr: ](Week_2_dplyr.html)
 
 
 ### Week3:
