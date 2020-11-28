@@ -1,6 +1,6 @@
 ---
-title: "Week_2_dplyr_exercises"
-author: "rbp"
+title: "Week2: Dplyr Exercises"
+author: "Betül Parlar"
 date: "11/28/2020"
 output: html_document
 ---
@@ -24,11 +24,7 @@ raw_df %>% glimpse()
 ## Exercises
 Solve the following exercises. Outputs are given below, you are expected write code to match the outputs.
 
-### 1. Find the mean and standard deviation of licensed geothermal productions in all years. (Tip: Use lubridate::year to get years from date data.)
-
-```{r}
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
+#### Q1. Find the mean and standard deviation of licensed geothermal productions in all years. (Tip: Use lubridate::year to get years from date data.)
 
 ```{r}
 ## # A tibble: 3 x 3
@@ -55,10 +51,7 @@ raw_df %>%
   summarise(mean_geo = round(mean(geothermal_lic)), sd_geo = round(sd(geothermal_lic),1))
 ```
 
-### 2. Find the hourly average unlicensed solar (sun_ul) production levels for May 2020.
-```{r}
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
+#### Q2. Find the hourly average unlicensed solar (sun_ul) production levels for May 2020.
 
 ```{r}
 ## # A tibble: 24 x 2
@@ -82,10 +75,7 @@ raw_df %>%
 
 ```
 
-### 3. Find the average daily percentage change of licensed biomass (biomass_lic) in 2019. (e.g. Suppose daily production is 50 in day 1 and 53 in day 2, then the change should be (53-50)/50 -1 = 0.06) (Tip: Use lubridate::as_date to convert date time to date. Use lag and lead functions to offset values.)
-```{r}
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
+#### Q3. Find the average daily percentage change of licensed biomass (biomass_lic) in 2019. (e.g. Suppose daily production is 50 in day 1 and 53 in day 2, then the change should be (53-50)/50 -1 = 0.06) (Tip: Use lubridate::as_date to convert date time to date. Use lag and lead functions to offset values.)
 
 ```{r}
 ## # A tibble: 1 x 1
@@ -109,10 +99,8 @@ raw_df %>%
   summarise(average_change = mean(c(NA, diff(p)),na.rm=TRUE))
 
 ```
-### 4. Find the yearly total production levels in TWh (Current values are in MWh. 1 GWh is 1000 MWh and 1 TWh is 1000 GWh). (Tip: In order to avoid a lengthy summation you can use tidyr::pivot_longer to get a long format.)
-```{r}
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
+#### Q4. Find the yearly total production levels in TWh (Current values are in MWh. 1 GWh is 1000 MWh and 1 TWh is 1000 GWh). (Tip: In order to avoid a lengthy summation you can use tidyr::pivot_longer to get a long format.)
+
 ```{r}
 ## # A tibble: 3 x 2
 ##    year total_production
